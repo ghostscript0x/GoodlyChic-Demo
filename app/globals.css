@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand tokens — mirror of tailwind.config.ts, exposed for inline SVG use. */
+    --ivory: #f7f3ed;
+    --espresso: #171513;
+    --taupe: #d8cec1;
+    --sand: #e9e0d5;
+    --champagne: #b69a6a;
+    --blush: #e8d8d2;
+
+    --header-height: 4.5rem;
+    --announcement-height: 2.25rem;
+  }
+
+  * {
+    border-color: var(--taupe);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ivory font-sans text-body text-espresso antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-normal text-espresso;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--espresso);
+    color: var(--ivory);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--espresso);
+    outline-offset: 2px;
+  }
+
+  /* Champagne is a hairline accent; it must never be the only focus cue. */
+  .on-dark :focus-visible,
+  .bg-espresso :focus-visible {
+    outline-color: var(--ivory);
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Native select arrows removed in favour of the brand chevron. */
+  select {
+    appearance: none;
+    background-image: none;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8 lg:px-12;
+  }
+
+  .shell-wide {
+    @apply mx-auto w-full max-w-wide px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Small tracked uppercase label. Champagne appears only as a leading dash. */
+  .eyebrow {
+    @apply font-sans text-label font-medium uppercase text-espresso-55;
+  }
+
+  .eyebrow-dark {
+    @apply font-sans text-label font-medium uppercase text-ivory-70;
+  }
+
+  .rule {
+    @apply h-px w-full bg-taupe;
+  }
+
+  .link-underline {
+    @apply relative inline-block;
+  }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute -bottom-0.5 left-0 h-px w-0 bg-current transition-[width] duration-300 ease-editorial;
+  }
+
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    @apply w-full;
+  }
+
+  /* Champagne dash used beside an eyebrow label. */
+  .dash::before {
+    content: '';
+    @apply mr-3 inline-block h-px w-6 translate-y-[-0.3em] bg-champagne;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ────────────────────────── Image placeholders ──────────────────────
+     Warm tonal fields with soft light falloff. Tones vary per category so the
+     product grid reads as composed art direction rather than repetition. */
+  .gc-ph {
+    background-image:
+      radial-gradient(115% 85% at 20% 8%, var(--ph-b) 0%, transparent 58%),
+      radial-gradient(95% 75% at 84% 92%, var(--ph-c) 0%, transparent 60%),
+      linear-gradient(168deg, var(--ph-b) 0%, var(--ph-a) 54%, var(--ph-c) 100%);
+  }
+
+  .gc-ph[data-tone='sand'] {
+    --ph-a: #e9e0d5;
+    --ph-b: #f3ece2;
+    --ph-c: #dbcdb9;
+  }
+
+  .gc-ph[data-tone='taupe'] {
+    --ph-a: #d8cec1;
+    --ph-b: #e7dfd5;
+    --ph-c: #c5b8a7;
+  }
+
+  .gc-ph[data-tone='blush'] {
+    --ph-a: #e8d8d2;
+    --ph-b: #f2e6e2;
+    --ph-c: #d8c3bb;
+  }
+
+  .gc-ph[data-tone='ivory'] {
+    --ph-a: #f2ece3;
+    --ph-b: #fbf8f4;
+    --ph-c: #e5dccf;
+  }
+
+  .gc-ph[data-tone='chalk'] {
+    --ph-a: #efeae3;
+    --ph-b: #f8f5f0;
+    --ph-c: #ddd4c7;
+  }
+
+  .gc-ph[data-tone='clay'] {
+    --ph-a: #e0d3c4;
+    --ph-b: #ede2d6;
+    --ph-c: #c9b7a4;
+  }
+
+  /* Faint texture so large fields never look flat — not a film-grain effect. */
+  .gc-grain {
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.05;
+  }
+
+  /* Loading shimmer, tuned to feel like light rather than a spinner. */
+  .gc-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 100%
+    );
+    animation: gc-sweep 1.9s ease-in-out infinite;
+  }
+
+  @keyframes gc-sweep {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@layer utilities {
+  .section-y {
+    @apply py-24 md:py-32 lg:py-38;
+  }
+
+  .section-y-tight {
+    @apply py-16 md:py-24;
+  }
+
+  .pad-bottom-nav {
+    padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
